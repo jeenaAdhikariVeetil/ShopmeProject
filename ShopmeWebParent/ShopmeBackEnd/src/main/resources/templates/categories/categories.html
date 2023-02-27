@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Home - Shopeme Admin</title>
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/all.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/fontawesome/style.css}">
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript"
+	th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+</head>
+<body>
+	<div class="container-fluid">
+		<div>
+			<h1>Manage Categories</h1>
+		<a th:href="@{/categories/new}" class="fas fa-folder-plus fa-2x icon-dark mr-2"></a>
+		<a th:href="@{/categories/export/csv}" class="fas fa-file-csv fa-2x icon-dark mr-2"></a>
+		</div>
+		
+		
+		
+		<div>
+		<table class="table table-bordered table-striped table-hover table-responsive-xl">
+		<thead class="thead-dark">
+		
+			<tr>
+						<th>ID</th>
+						<th>Category Image</th>
+						<th>Category name</th>
+						<th>Alias</th>
+						<th>Enabled</th>
+					
+			</tr>
+		</thead>
+		<tbody>
+					<tr th:each="cat :${listCategories}">
+						<td>[[${cat.id}]]</td>
+						<td>
+						<img th:src="@{${cat.image}}" style="width: 100px" class="img-fluid"/>
+					</td>
+						<td>[[${cat.name}]]</td>
+						<td>[[${cat.alias}]]</td>
+						<td>
+						<div th:replace="fragments :: status(${cat.enabled}, 'category', '/categories/' + ${cat.id})" ></div>
+					</td>
+					<td>
+						<div th:replace="fragments :: edit('category', '/categories/edit/' + ${cat.id})" ></div>
+					&nbsp; 
+						<!-- <div th:replace="fragments :: delete('category', ${cat.id}, '/categories/delete/' + ${cat.id}, ${!cat.hasChildren})" ></div>	 -->
+					</td>		
+					</tr>
+
+				</tbody>
+		</table>
+		</div>
+		
+		<div class="modal fade text-center" id="confirmModal">
+			<div class="modal-dialog">
+
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					</div>
+
+					<div class="modal-body">
+						<span id="confirmText">Are you sure you want to delete this user ID</span>
+					</div>
+					<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">Yes</a>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	<div class="text-center">
+		<p>Shopme Control panel -Copyright &copy; Shopme</p>
+	</div>
+	<script type="text/javascript">
+	$(document).ready(function()
+			{
+		$(".link-delete").on("click",function(e)
+		{
+			e.preventDefault();
+			link=$(this);
+			userId=link.attr("userId");
+			//alert($(this).attr("href"));
+			$("#yesButton").attr("href",link.attr("href"));
+			$("#confirmText").text("Are you sure you want to delete this user ID  "+userId + " ?");
+			$("#confirmModal").modal();
+			
+		});
+		
+			});
+	</script>
+</body>
+</html>
